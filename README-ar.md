@@ -1,4 +1,4 @@
-[English](./README.md) | [繁中版](./README-tw.md) | [简中版](./README-zh.md) | [Português (Brasil)](./README-pt_BR.md) | [Français](./README-fr.md) | [한국어](./README-ko.md) | [Nederlands](./README-nl.md) | [Indonesia](./README-id.md) | [ไทย](./README-th.md) | [Русский](./README-ru.md) | [Українська](./README-uk.md) | [Español](./README-es.md) | [Italiano](./README-it.md) | [日本語](./README-ja.md) | [Deutsch](./README-de.md) | [Türkçe](./README-tr.md) | [Tiếng Việt](./README-vi.md) | [Монгол](./README-mn.md) | [हिंदी](./README-hi.md) | [Polski](./README-pl.md) | [Македонски](./README-mk.md) | [ລາວ](./README-lo.md)
+[English](./README.md) | [繁中版](./README-tw.md) | [简中版](./README-zh.md) | [Português (Brasil)](./README-pt_BR.md) | [Français](./README-fr.md) | [한국어](./README-ko.md) | [Nederlands](./README-nl.md) | [Indonesia](./README-id.md) | [ไทย](./README-th.md) | [Русский](./README-ru.md) | [Українська](./README-uk.md) | [Español](./README-es.md) | [Italiano](./README-it.md) | [日本語](./README-ja.md) | [Deutsch](./README-de.md) | [Türkçe](./README-tr.md) | [Tiếng Việt](./README-vi.md) | [Монгол](./README-mn.md) | [हिंदी](./README-hi.md) | [Polski](./README-pl.md) | [Македонски](./README-mk.md) | [ລາວ](./README-lo.md) | [فارسی](./README-fa.md) | [മലയാളം](./README-ml.md) 
 <div dir="rtl">
 
 # API Security Checklist
@@ -10,7 +10,7 @@
 ## المصادقة (Authentication)
 - [ ] لا تستخدم `Basic Auth` لكن استخدم المعايير القياسية للمصادقة (مثال [JWT](https://jwt.io/), [OAuth](https://oauth.net/)).
 - [ ] لا تعد اختراع العجلة في `المصادقة`، `توليد الرموز`، `تخزين كلمات المرور`. قم باستخدام المعايير القياسية.
-- [ ] استخدم `تحديد عدد المحاولات` و`الرمان من الدخول jail feature` في تسجيل الدخول.
+- [ ] استخدم `تحديد عدد المحاولات` و`الحرمان من الدخول jail feature` في تسجيل الدخول.
 - [ ] استخدم التشفير في كل البيانات الحساسة.
 
 ### JSON Web Token) JWT)

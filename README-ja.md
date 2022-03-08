@@ -1,4 +1,4 @@
-[English](./README.md) | [繁中版](./README-tw.md) | [简中版](./README-zh.md) | [Português (Brasil)](./README-pt_BR.md) | [Français](./README-fr.md) | [한국어](./README-ko.md) | [Nederlands](./README-nl.md) | [Indonesia](./README-id.md) | [ไทย](./README-th.md) | [Русский](./README-ru.md) | [Українська](./README-uk.md) | [Español](./README-es.md) | [Italiano](./README-it.md) | [Deutsch](./README-de.md) | [Türkçe](./README-tr.md) | [Tiếng Việt](./README-vi.md) | [Монгол](./README-mn.md) | [हिंदी](./README-hi.md) | [العربية](./README-ar.md) | [Polski](./README-pl.md) | [Македонски](./README-mk.md) | [ລາວ](./README-lo.md)
+[English](./README.md) | [繁中版](./README-tw.md) | [简中版](./README-zh.md) | [Português (Brasil)](./README-pt_BR.md) | [Français](./README-fr.md) | [한국어](./README-ko.md) | [Nederlands](./README-nl.md) | [Indonesia](./README-id.md) | [ไทย](./README-th.md) | [Русский](./README-ru.md) | [Українська](./README-uk.md) | [Español](./README-es.md) | [Italiano](./README-it.md) | [Deutsch](./README-de.md) | [Türkçe](./README-tr.md) | [Tiếng Việt](./README-vi.md) | [Монгол](./README-mn.md) | [हिंदी](./README-hi.md) | [العربية](./README-ar.md) | [Polski](./README-pl.md) | [Македонски](./README-mk.md) | [ລາວ](./README-lo.md) | [فارسی](./README-fa.md) | [മലയാളം](./README-ml.md)
 
 # APIセキュリティチェックリスト
 APIを設計、テスト、リリースするときの最も重要なセキュリティ対策のチェックリスト
@@ -8,13 +8,13 @@ APIを設計、テスト、リリースするときの最も重要なセキュ�
 
 ## 認証
 - [ ] `Basic認証`を利用せず、標準的な認証を利用する（例: [JWT](https://jwt.io/)、[OAuth](https://oauth.net/)）。
-- [ ] `認証`、`トークンの生成`、`パスワードの保管`の車輪の再発明を行わず、標準化されているものを利用する。
-- [ ] ログインでは`最大リトライ回数（Max Retry）`とjail機能を利用する。
-- [ ] 全ての機密情報は暗号化する。
+- [ ] `認証`、`トークンの生成`、`パスワードの保管`において「車輪の再発明」をしないこと。すでに標準化されているものを利用する。
+- [ ] ログインにおいては`最大リトライ回数（Max Retry）`とjail機能を利用する。
+- [ ] 全ての機微情報において暗号化を活用する。
 
 ### JWT (JSON Web Token)
-- [ ] ブルートフォース攻撃を困難にするため、ランダムで複雑なキー（`JWT Secret`）を使用する。
-- [ ] ペイロードからアルゴリズムを抽出してはいけない。必ずバックエンドで暗号化する（`HS256`または`RS256`）。
+- [ ] ランダムで複雑なキー（`JWT Secret`）を使用する。これはブルートフォース攻撃を困難にするため。
+- [ ] ペイロードからアルゴリズムを抽出しないこと。アルゴリズムは必ずバックエンド処理のみとする（`HS256`または`RS256`）。
 - [ ] トークンの有効期限（`TTL`, `RTTL`）を可能な限り短くする。
 - [ ] JWTのペイロードに機密情報を格納してはいけない。それは[簡単に](https://jwt.io/#debugger-io)復号できる。
 
