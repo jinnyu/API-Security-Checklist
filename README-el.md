@@ -1,4 +1,4 @@
-[English](./README.md) | [繁中版](./README-tw.md) | [简中版](./README-zh.md) | [Português (Brasil)](./README-pt_BR.md) | [Français](./README-fr.md) | [한국어](./README-ko.md) | [Nederlands](./README-nl.md) | [Indonesia](./README-id.md) | [ไทย](./README-th.md) | [Русский](./README-ru.md) | [Українська](./README-uk.md) | [Español](./README-es.md) | [Italiano](./README-it.md) | [日本語](./README-ja.md) | [Deutsch](./README-de.md) | [Türkçe](./README-tr.md) | [Tiếng Việt](./README-vi.md) | [Монгол](./README-mn.md) | [हिंदी](./README-hi.md) | [العربية](./README-ar.md) | [Polski](./README-pl.md) | [Македонски](./README-mk.md) | [ລາວ](./README-lo.md) | [فارسی](./README-fa.md) | [മലയാളം](./README-ml.md) 
+[English](./README.md) | [繁中版](./README-tw.md) | [简中版](./README-zh.md) | [العربية](./README-ar.md) | [বাংলা](./README-bn.md) | [Čeština](./README-cs.md) | [Deutsch](./README-de.md) | [Español](./README-es.md) | [فارسی](./README-fa.md) | [Français](./README-fr.md) | [हिंदी](./README-hi.md) | [Indonesia](./README-id.md) | [Italiano](./README-it.md) | [日本語](./README-ja.md) | [한국어](./README-ko.md) | [ລາວ](./README-lo.md) | [Македонски](./README-mk.md) | [മലയാളം](./README-ml.md) | [Монгол](./README-mn.md) | [Nederlands](./README-nl.md) | [Polski](./README-pl.md) | [Português (Brasil)](./README-pt_BR.md) | [Русский](./README-ru.md) | [ไทย](./README-th.md) | [Türkçe](./README-tr.md) | [Українська](./README-uk.md) | [Tiếng Việt](./README-vi.md)
 
 # API λίστα ελέγχου ασφαλείας
 Λίστα με τα πιο σημαντικά μέτρα ασφαλείας στον σχεδιασμό, έλεγχο, και την έκδοση του API σας.
@@ -14,9 +14,19 @@
 
 ### JWT (JSON Web Token)
 - [ ] Χρησιμοποιήστε τυχαίο περίπλοκο κλειδί (`JWT Secret`) για να γίνει αρκετά δύσκολο να αποκρυπτογραφηθεί με brute forcing.
-- [ ] Μη χρησιμοποιήτε/αφαιρήτε τον αλγόριθμο απο το payload. Ο αλγόριθμος πρέπει να πραγματοποιήτε στο backend (`HS256` or `RS256`).
+- [ ] Μη χρησιμοποιήτε/αφαιρήτε τον αλγόριθμο απο το payload. Ο αλγόριθμος πρέπει να πραγματοποιήτε στο backend (`HS256` ή `RS256`).
 - [ ] Κάντε το token να λήγει (token expiration) (`TTL`, `RTTL`) όσο πιο σύντομα γίνεται.
 - [ ] Μη καταχωρείτε ευαίσθητα δεδομένα στο JWT payload, μπορεί να αποκρυπτογραφηθεί εύκολα [easily](https://jwt.io/#debugger-io).
+- [ ] Αποφύγετε την αποθήκευση πάρα πολλών δεδομένων. JWT είναι συνήθως κοινόχρηστο σε headers και έχουν όριο μεγέθους.
+
+## Πρόσβαση (Access)
+- [ ] Περιορίστε τα αιτήματα (requests) (Throttling) για να αποφύγετε επιθέσεις DDoS / brute-force.
+- [ ] Χρησιμοποιήστε HTTPS στο server side για να αποφύγετε επιθέσεις MITM (Man in the Middle Attack).
+- [ ] Χρησιμοποιήστε `HSTS` κεφαλίδα (header) με SSL για να αποφύγετε SSL Strip επιθέσεις.
+- [ ] Απενεργοποιήστε τις καταχωρίσεις directory.
+- [ ] Για ιδιωτικά API, επιτρέπεται η πρόσβαση μόνο από IP/κεντρικούς στη λίστα επιτρεπόμενων.
+
+## Authorization
 
 ### OAuth
 - [ ] Πάντα να επαληθεύετε το `redirect_uri` στο server-side και επιτρέπετε μόνο whitelisted URLs.
@@ -24,17 +34,13 @@
 - [ ] Χρησιμοποιήστε `state` παράμετρο με τυχαίο περίπλοκο κλειδί (hash) για να αποτρέψετε CSRF κατα τη διάρκεια της OAuth authentication διαδικασίας.
 - [ ] Ορίστε το προεπιλεγμένο πεδίο (default scope), και επικυρώστε τις παραμέτρους πεδίου (scope parameters) για κάθε εφαρμογή.
 
-## Πρόσβαση (Access)
-- [ ] Περιορίστε τα αιτήματα (requests) (Throttling) για να αποφύγετε επιθέσεις DDoS / brute-force.
-- [ ] Χρησιμοποιήστε HTTPS στο server side για να αποφύγετε επιθέσεις MITM (Man in the Middle Attack).
-- [ ] Χρησιμοποιήστε `HSTS` κεφαλίδα (header) με SSL για να αποφύγετε SSL Strip επιθέσεις.
-
 ## Είσοδος δεδομένων (Input)
 - [ ] Χρησιμοποιήστε την κατάλληλη HTTP μέθοδο σύμφωνα με τη λειτουργία που χρειάζεστε: `GET (read)`, `POST (create)`, `PUT/PATCH (replace/update)`, και `DELETE (για διαγραφή αρχείου)`, και απαντήστε με `405 Method Not Allowed` εάν η ζητούμενη μέθοδος δεν είναι κατάλληλη για την αιτούμενη εφαρμογή.
 - [ ] Επικυρώστε `content-type` στη ζητούμενη Accept κεφαλίδα (Content Negotiation) για να επιτρέψετε μόνο το format που υποστηρίζετε (π.χ. `application/xml`, `application/json`, κτλ.) και απαντήστε με `406 Not Acceptable` εάν δεν το υποστηρίζετε.
 - [ ] Επικυρώστε `content-type` δεδομένα που στέλνετε, με τον ίδιο τρόπο όπως τα δέχεστε (π.χ. `application/x-www-form-urlencoded`, `multipart/form-data`, `application/json`, κτλ.).
 - [ ] Επικυρώστε την οποιαδήποτε είσοδο δεδομένων απο τους χρήστες, για να αποφύγετε τα κοινά κενά ασφαλείας (π.χ. `XSS`, `SQL-Injection`, `Remote Code Execution`, κτλ.).
 - [ ] Μη χρησιμοποιήτε ευαίσθητα δεδομένα (`credentials`, `Passwords`, `security tokens`, ή `API keys`) στο URL, αλλά χρησιμοποιήστε τη κοινή Authorization κεφαλίδα (standard Authorization header).
+- [ ] Χρησιμοποιήστε μόνο κρυπτογράφηση από την πλευρά του διακομιστή.
 - [ ] Χρησιμοποιήστε API Gateway service για να ενεργοποιήσετε caching, Rate Limit policies (π.χ. `Quota`, `Spike Arrest`, ή `Concurrent Rate Limit`) και κάντε deploy APIs resources δυναμικά.
 
 ## Επεξεργασία (Processing)
@@ -46,6 +52,7 @@
 - [ ] Χρησιμοποιήστε CDN για την φόρτωση αρχείων (file uploads).
 - [ ] Εάν επεξεργάζεστε μεγάλο αριθμο δεδομένων, χρησιμοποιήστε Workers και Queues για να γίνετε η επεξεργασία στο background και να γίνεται η επιστροφή απάντησης πολύ πιο γρήγορα, αποφεύγοντας HTTP Blocking.
 - [ ] Μην ξεχνάτε να απενεργοποιήσετε το DEBUG mode.
+- [ ] Χρησιμοποιήστε μη εκτελέσιμες στοίβες όταν είναι διαθέσιμες.
 
 ## Αποστολή/Επιστροφή δεδομένων (Output)
 - [ ] Αποστέλετε `X-Content-Type-Options: nosniff` κεφαλίδα (header).
@@ -60,7 +67,16 @@
 - [ ] Ελέγξτε το σχεδιασμό και την κατάσταση της εφαρμογή σας με επαρκή κάλυψη τεστ Unit / integration.
 - [ ] Χρησιμοποιήτε code review διαδικασίες και μη δέχεστε self-approval απο την ομάδα.
 - [ ] Εξασφαλίστε ότι όλα τα στοιχέια των υπηρεσιών σας περνούν απο στατικό έλεγχο με AV software πριν τα αναρτήσετε στο production, συμπεριλαμβανομένου οποιασδήποτε εξωτερικής βιβλιοθήκης που μπορει να χρησιμοποιήτε.
+- [ ] Εκτελείτε συνεχώς δοκιμές ασφαλείας (στατική/δυναμική ανάλυση) στον κώδικά σας.
+- [ ] Ελέγξτε τις εξαρτήσεις σας (τόσο το λογισμικό όσο και το λειτουργικό σύστημα) για γνωστά τρωτά σημεία.
 - [ ] Σχεδιάστε rollback διαδικασίες για deployments.
+
+## Monitoring
+- [ ] Use centralized logins for all services and components.
+- [ ] Use agents to monitor all traffic, errors, requests, and responses.
+- [ ] Use alerts for SMS, Slack, Email, Telegram, Kibana, Cloudwatch, etc.
+- [ ] Ensure that you aren't logging any sensitive data like credit cards, passwords, PINs, etc.
+- [ ] Use an IDS and/or IPS system to monitor your API requests and instances.
 
 
 ---

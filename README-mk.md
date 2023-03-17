@@ -1,4 +1,4 @@
-[English](./README.md) | [繁中版](./README-tw.md) | [简中版](./README-zh.md) | [Português (Brasil)](./README-pt_BR.md) | [Français](./README-fr.md) | [한국어](./README-ko.md) | [Nederlands](./README-nl.md) | [Indonesia](./README-id.md) | [ไทย](./README-th.md) | [Русский](./README-ru.md) | [Українська](./README-uk.md) | [Español](./README-es.md) | [Italiano](./README-it.md) | [日本語](./README-ja.md) | [Deutsch](./README-de.md) | [Türkçe](./README-tr.md) | [Tiếng Việt](./README-vi.md) | [Монгол](./README-mn.md) | [हिंदी](./README-hi.md) | [العربية](./README-ar.md) | [Polski](./README-pl.md) | [ລາວ](./README-lo.md) | [فارسی](./README-fa.md) | [മലയാളം](./README-ml.md)
+[English](./README.md) | [繁中版](./README-tw.md) | [简中版](./README-zh.md) | [العربية](./README-ar.md) | [বাংলা](./README-bn.md) | [Čeština](./README-cs.md) | [Deutsch](./README-de.md) | [Ελληνικά](./README-el.md) | [Español](./README-es.md) | [فارسی](./README-fa.md) | [Français](./README-fr.md) | [हिंदी](./README-hi.md) | [Indonesia](./README-id.md) | [Italiano](./README-it.md) | [日本語](./README-ja.md) | [한국어](./README-ko.md) | [ລາວ](./README-lo.md) | [മലയാളം](./README-ml.md) | [Монгол](./README-mn.md) | [Nederlands](./README-nl.md) | [Polski](./README-pl.md) | [Português (Brasil)](./README-pt_BR.md) | [Русский](./README-ru.md) | [ไทย](./README-th.md) | [Türkçe](./README-tr.md) | [Українська](./README-uk.md) | [Tiếng Việt](./README-vi.md)
 
 # API Безбедносна контролна листа
 Безбедносна контролна листа од најважните безбедносни контрамерки при дизајнирање, тестирање и пуштање во употреба на вашето API.
@@ -14,9 +14,19 @@
 
 ### JWT (JSON Web Token)
 - [ ] Користете случајно генериран и комплициран клуч (`JWT Secret`) за да направите што можно потешко погодување на токенот со испробување на секоја можна комбинација.
-- [ ] Don't extract the algorithm from the payload. Force the algorithm in the backend (`HS256` or `RS256`).
+- [ ] Не го извлекувајте алгоритмот од носивост. Присилете го алгоритмот во задниот дел (`HS256` или `RS256`).
 - [ ] Направете токенот да истече (`TTL`, `RTTL`) што е можно побрзо.
 - [ ] Не чувајте чувствителни податоци во JWR payload, може да се декодира [лесно](https://jwt.io/#debugger-io).
+- [ ] Избегнувајте да складирате премногу податоци. JWT обично се дели во header и тие имаат ограничување на големината.
+
+## Пристап
+- [ ] Ограничете ги барањата (забавување) за да избегнете напади DDoS / brute-force.
+- [ ] Користете HTTPS на страната на серверот за да избегнете MITM (Man In The Middle Attack).
+- [ ] Користете `HSTS` насловот со SSL за да избегнете SSL Strip напад.
+- [ ] Исклучете ги списоците на директориуми.
+- [ ] За приватни API, дозволете пристап само од IP-а/домаќини на белата листа.
+
+## Authorization
 
 ### OAuth
 - [ ] Секогаш проверувајте ја `redirect_uri` од страна на серверот за да дозволите само бела листа на адреси.
@@ -24,17 +34,13 @@
 - [ ] Користете `state` параметар со случаен хаш за да се спречи CSRF на процесот на автентикација на OAuth.
 - [ ] Дефинирајте го основниот опсег и проверете ги параметрите на опсегот за секоја апликација.
 
-## Пристап
-- [ ] Ограничете ги барањата (забавување) за да избегнете напади DDoS / brute-force.
-- [ ] Користете HTTPS на страната на серверот за да избегнете MITM (Man In The Middle Attack).
-- [ ] Користете `HSTS` насловот со SSL за да избегнете SSL Strip напад.
-
 ## Влез
 - [ ] Користете ја соодветната HTTP-метод според операцијата: "GET (read)", "POST (создади)", "PUT / PATCH (замени / ажурирај)" и "DELETE (за бришење на запис) 405 Метод не е дозволено` ако бараниот метод не е соодветен за бараниот ресурс.
 - [ ] Потврдете `content-type` на барање Accept header (Content Negotiation) за да го дозволите само вашиот поддржан формат (на пр.`application/xml`, `application/json`, итн) И да одговори со 406 Not Acceptable` одговор ако не се совпаѓа.
 - [ ] Потврдете ги `content-type` на објавените податоци што ги прифаќате (на пр., `application/x-www-form-urlencoded`, `multipart/form-data`, `application/json`, итн.).
 - [ ] Потврдете го корисничкиот влез за да избегнете вообичаени слабости (п.р. `XSS`, `SQL-Injection`, `Remote Code Execution`, итн).
 - [ ] Не користете чувствителни податоци(`credentials`, `Passwords`, `security tokens`, или `API keys`) во URL-то, но користете стандарден заглавие за авторизација.
+- [ ] Користете само шифрирање од страна на серверот.
 - [ ] Користете API Gateway-услуга за да овозможите кеширање, политики за ограничување на тарифите (пр. `Quota`, `Spike Arrest`, `Concurrent Rate Limit`) и динамички да ги распоредите ресурсите за API-то.
 
 ## Processing
@@ -46,6 +52,7 @@
 - [ ] Користете CDN за закачување на фајлови.
 - [ ] Ако се занимавате со огромни количини на податоци, користете Workers and Queues за да процесирате што е можно повеќе во позадина и да го вратите одговорот брзо за да избегнете блокирање на HTTP.
 - [ ] Не заборавајте да го исклучите режимот DEBUG.
+- [ ] Користете неизвршни stack кога е достапно.
 
 ## Излез
 - [ ] Праќај `X-Content-Type-Options: nosniff` хедер.
@@ -60,7 +67,16 @@
 - [ ] Ревизија на вашиот дизајн и имплементација со покриеност тестови за единица / интеграција.
 - [ ] Користете процес на прегледување на кодот и не дозволувајте самоодобрување.
 - [ ] Осигурајте се дека сите компоненти на вашите услуги се статички скенирани од AV-софтверот пред да се изврши притисок за производство, вклучувајќи библиотеки на продавачи и други зависности.
+- [ ] Континуирано извршувајте безбедносни тестови (статичка/динамичка анализа) на вашиот код.
+- [ ] Проверете ги вашите зависности (и софтвер и ОС) за познати пропусти.
 - [ ] Дизајн на rollback за во продукција.
+
+## Monitoring
+- [ ] Use centralized logins for all services and components.
+- [ ] Use agents to monitor all traffic, errors, requests, and responses.
+- [ ] Use alerts for SMS, Slack, Email, Telegram, Kibana, Cloudwatch, etc.
+- [ ] Ensure that you aren't logging any sensitive data like credit cards, passwords, PINs, etc.
+- [ ] Use an IDS and/or IPS system to monitor your API requests and instances.
 
 
 ---

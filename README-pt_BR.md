@@ -1,4 +1,4 @@
-[English](./README.md) | [繁中版](./README-tw.md) | [简中版](./README-zh.md) | [Français](./README-fr.md) | [한국어](./README-ko.md) | [Nederlands](./README-nl.md) | [Indonesia](./README-id.md) | [ไทย](./README-th.md) | [Русский](./README-ru.md) | [Українська](./README-uk.md) | [Español](./README-es.md) | [Italiano](./README-it.md) | [日本語](./README-ja.md) | [Deutsch](./README-de.md) | [Türkçe](./README-tr.md) | [Tiếng Việt](./README-vi.md) | [Монгол](./README-mn.md) | [हिंदी](./README-hi.md) | [العربية](./README-ar.md) | [Polski](./README-pl.md) | [Македонски](./README-mk.md) | [ລາວ](./README-lo.md) | [فارسی](./README-fa.md) | [മലയാളം](./README-ml.md)
+[English](./README.md) | [繁中版](./README-tw.md) | [简中版](./README-zh.md) | [العربية](./README-ar.md) | [বাংলা](./README-bn.md) | [Čeština](./README-cs.md) | [Deutsch](./README-de.md) | [Ελληνικά](./README-el.md) | [Español](./README-es.md) | [فارسی](./README-fa.md) | [Français](./README-fr.md) | [हिंदी](./README-hi.md) | [Indonesia](./README-id.md) | [Italiano](./README-it.md) | [日本語](./README-ja.md) | [한국어](./README-ko.md) | [ລາວ](./README-lo.md) | [Македонски](./README-mk.md) | [മലയാളം](./README-ml.md) | [Монгол](./README-mn.md) | [Nederlands](./README-nl.md) | [Polski](./README-pl.md) | [Русский](./README-ru.md) | [ไทย](./README-th.md) | [Türkçe](./README-tr.md) | [Українська](./README-uk.md) | [Tiếng Việt](./README-vi.md)
 
 # API Security Checklist
 Lista das mais importantes medidas de segurança para o desenvolvimento, teste e publicação da sua API.
@@ -17,6 +17,16 @@ Lista das mais importantes medidas de segurança para o desenvolvimento, teste e
 - [ ] Não utilize o algoritmo de criptografia informado no cabeçalho do payload. Force o uso de um algoritmo específico no _back-end_ (`HS256` ou `RS256`).
 - [ ] Defina o tempo de vida do _token_ (`TTL`, `RTTL`) o menor possível.
 - [ ] Não armazene informações confidenciais no JWT, pois elas podem ser [facilmente decodificadas](https://jwt.io/#debugger-io).
+- [ ] Evite armazenar muitos dados. JWT geralmente é compartilhado em headers e eles têm um limite de tamanho.
+
+## Acesso (_Access_)
+- [ ] Limite a quantidade de requisições (_Throttling_) para evitar ataques DDoS e de força bruta.
+- [ ] Use HTTPS no seu servidor para evitar ataques MITM (_Man In The Middle Attack_).
+- [ ] Use cabeçalho `HSTS` com SSL para evitar ataques _SSL Strip_.
+- [ ] Desative as listagens de diretórios.
+- [ ] Para APIs privadas, permita o acesso apenas de IPs/hosts da lista branca (whitelist).
+
+## Autorização (_Authorization_)
 
 ### OAuth
 - [ ] Sempre valide o `redirect_uri` no seu servidor através de uma lista de URLs conhecidas (previamente cadastradas).
@@ -24,17 +34,13 @@ Lista das mais importantes medidas de segurança para o desenvolvimento, teste e
 - [ ] Utilize o parâmetro `state` com um _hash_ aleatório para previnir CSRF no processo de autenticação OAuth.
 - [ ] Defina escopo de dados, e valide o parâmetro `scope` para cada aplicação.
 
-## Acesso (_Access_)
-- [ ] Limite a quantidade de requisições (_Throttling_) para evitar ataques DDoS e de força bruta.
-- [ ] Use HTTPS no seu servidor para evitar ataques MITM (_Man In The Middle Attack_).
-- [ ] Use cabeçalho `HSTS` com SSL para evitar ataques _SSL Strip_.
-
 ## Requisição (_Input_)
 - [ ] Utilize o método HTTP apropriado para cada operação, `GET (obter)`, `POST (criar)`, `PUT/PATCH (trocar/atualizar)` e `DELETE (apagar)`.
 - [ ] Valide o tipo de conteúdo informado no cabeçalho `Accept` da requisição (_Content Negotiation_) para permitir apenas os formatos suportados pela sua API (ex. `application/xml`, `application/json` ... etc), respondendo com o status `406 Not Acceptable` se ele não for suportado.
 - [ ] Valide o tipo de conteúdo do conteúdo da requisição informado no cabeçalho `Content-Type` da requisição para permitir apenas os formatos suportados pela sua API (ex. `application/x-www-form-urlencoded`, `multipart/form-data, application/json` ... etc).
 - [ ] Valide o conteúdo da requisição para evitar as vulnerabilidades mais comuns (ex. `XSS`, `SQL-Injection`, `Remote Code Execution` ... etc).
 - [ ] Não utilize nenhuma informação sensível (credenciais, senhas, _tokens_ de autenticação) na URL. Use o cabeçalho `Authorization` da requisição.
+- [ ] Use apenas criptografia do lado do servidor.
 - [ ] Use um serviço _gateway_ para a sua API para habilitar _cache_, limitar acessos sucessivos (ex. por quantidade máxima permitida (_Quota_), por limitar tráfego em situações de estresse (_spike arrest_) ou por limitar o número de conexões simultâneas na sua API (_Concurrent Rate Limit_)), e facilitar o _deploy_ de novas funcionalidades.
 
 ## Processamento (_Processing_)
@@ -46,6 +52,7 @@ Lista das mais importantes medidas de segurança para o desenvolvimento, teste e
 - [ ] Use CDN para _uploads_ de arquivos.
 - [ ] Se você estiver trabalhando com uma grande quantidade de dados, use _workers_ e _queues_ (fila de processos) para retornar uma resposta rapidamente e evitar o bloqueio de requisições HTTP.
 - [ ] Não se esqueça de desativar o modo de depuração (_DEBUG mode OFF_).
+- [ ] Use stacks não executáveis quando disponíveis.
 
 ## Resposta (_Output_)
 - [ ] Envie o cabeçalho `X-Content-Type-Options: nosniff`.
@@ -60,7 +67,16 @@ Lista das mais importantes medidas de segurança para o desenvolvimento, teste e
 - [ ] Monitore a especificação e implementação do escopo da sua API através de testes unitários e de integração.
 - [ ] Use um processo de revisão de código, ignorando sistemas de auto-aprovação.
 - [ ] Certifique-se de que todos os componentes de seus serviços sejam validados por _softwares_ AV (anti-vírus, anti-_malware_) antes de enviar para produção, incluindo as dependências de terceiros utilizadas.
+- [ ] Execute continuamente testes de segurança (análise estática/dinâmica) em seu código.
+- [ ] Verifique suas dependências (software e sistema operacional) para vulnerabilidades conhecidas.
 - [ ] Implemente funcionalidade de reversão de _deploy_ (_rollback_).
+
+## Monitoramento (_Monitoring_)
+- [ ] Use logins centralizados para todos os serviços e componentes.
+- [ ] Use agentes para monitorar todo o tráfego, erros, solicitações, e respostas.
+- [ ] Use alertas para SMS, Slack, Email, Telegram, Kibana, Cloudwatch, etc.
+- [ ] Verifique se você não está registrando dados confidenciais, como cartões de crédito, senhas, PINs, etc.
+- [ ] Use um sistema IDS e/ou IPS para monitorar as solicitações e instâncias de sua API.
 
 
 ---

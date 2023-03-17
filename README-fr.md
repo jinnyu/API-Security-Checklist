@@ -1,4 +1,4 @@
-[English](./README.md) | [繁中版](./README-tw.md) | [简中版](./README-zh.md) | [Português (Brasil)](./README-pt_BR.md) | [한국어](./README-ko.md) | [Nederlands](./README-nl.md) | [Indonesia](./README-id.md) | [ไทย](./README-th.md) | [Русский](./README-ru.md) | [Українська](./README-uk.md) | [Español](./README-es.md) | [Italiano](./README-it.md) | [日本語](./README-ja.md) | [Deutsch](./README-de.md) | [Türkçe](./README-tr.md) | [Tiếng Việt](./README-vi.md) | [Монгол](./README-mn.md) | [हिंदी](./README-hi.md) | [العربية](./README-ar.md) | [Polski](./README-pl.md) | [Македонски](./README-mk.md) | [ລາວ](./README-lo.md) | [فارسی](./README-fa.md) | [മലയാളം](./README-ml.md)
+[English](./README.md) | [繁中版](./README-tw.md) | [简中版](./README-zh.md) | [العربية](./README-ar.md) | [বাংলা](./README-bn.md) | [Čeština](./README-cs.md) | [Deutsch](./README-de.md) | [Ελληνικά](./README-el.md) | [Español](./README-es.md) | [فارسی](./README-fa.md) | [हिंदी](./README-hi.md) | [Indonesia](./README-id.md) | [Italiano](./README-it.md) | [日本語](./README-ja.md) | [한국어](./README-ko.md) | [ລາວ](./README-lo.md) | [Македонски](./README-mk.md) | [മലയാളം](./README-ml.md) | [Монгол](./README-mn.md) | [Nederlands](./README-nl.md) | [Polski](./README-pl.md) | [Português (Brasil)](./README-pt_BR.md) | [Русский](./README-ru.md) | [ไทย](./README-th.md) | [Türkçe](./README-tr.md) | [Українська](./README-uk.md) | [Tiếng Việt](./README-vi.md)
 
 # API Security Checklist
 Checklist des points de sécurité les plus importants lors de la conception, du test et de la mise en production de votre API.
@@ -17,6 +17,16 @@ Checklist des points de sécurité les plus importants lors de la conception, du
 - [ ] Ne pas extraire l'algorithme du payload. Imposer l'algorithme côté serveur (`HS256` ou `RS256`).
 - [ ] Rendre la durée de vie des tokens (`TTL`, `RTTL`) aussi courte que possible.
 - [ ] Ne pas stocker des informations sensibles du payload JWT, son décryptage est très [simple](https://jwt.io/#debugger-io).
+- [ ] Éviter de stocker trop de données. JWT est généralement partagé dans les en-têtes et ils ont une limite de taille.
+
+## Accès
+- [ ] Limiter le nombre de requêtes (limitation de bande passante) pour éviter les dénis de service et les attaques par force brute.
+- [ ] Utiliser le protocole HTTPS côté serveur afin d'éviter les attaques de l'homme du milieu (MITM).
+- [ ] Utiliser les entêtes `HSTS` avec SSL pour éviter les attaques SSL Strip.
+- [ ] Désactiver les listes du répertoires.
+- [ ] Pour les API privées, n'autorisez l'accès qu'à partir d'adresses IP/hôtes sur liste blanche.
+
+## Autorisation
 
 ### OAuth
 - [ ] Toujours valider la redirection d'uri (`redirect_uri`) côté serveur afin d'accéder uniquement aux URLs autorisées.
@@ -24,17 +34,13 @@ Checklist des points de sécurité les plus importants lors de la conception, du
 - [ ] Utiliser le paramètre d'état (`state`) avec un hash aléatoire pour prévenir les CSRF sur le processus d'authentification OAuth.
 - [ ] Définir la portée par défaut et valider le paramètre de portée pour chaque application.
 
-## Accès
-- [ ] Limiter le nombre de requêtes (limitation de bande passante) pour éviter les dénis de service et les attaques par force brute.
-- [ ] Utiliser le protocole HTTPS côté serveur afin d'éviter les attaques de l'homme du milieu (MITM).
-- [ ] Utiliser les entêtes `HSTS` avec SSL pour éviter les attaques SSL Strip.
-
 ## Entrées
 - [ ] Utiliser la bonne méthode en fonction de l'opération, `GET (lire)`, `POST (créer)`, `PUT (remplacer/mettre à jour)` et `DELETE (pour supprimer un enregistrement)`.
 - [ ] Valider le `content-type` dans l'en-tête HTTP des requêtes (négociation de contenu) pour n'autoriser que les formats supportés (e.g. `application/xml`, `application/json`, etc…) et renvoyer une réponse `406 Not Acceptable` si ça ne correspond pas.
 - [ ] Valider le `content-type` des données postées avec celles acceptées (e.g. `application/x-www-form-urlencoded`, `multipart/form-data, application/json`, etc…).
 - [ ] Valider les entrées utilisateur pour éviter les vulnérabilités classiques (e.g. `XSS`, `SQL-Injection`, `Remote Code Execution`, etc…).
 - [ ] N'utiliser aucune donnée sensible (`identifiants`, `mots de passe`, `tokens de sécurité`, ou `clés d'API`) dans l'URL, mais utiliser les en-têtes d'autorisations standards.
+- [ ] Utiliser uniquement le chiffrement côté serveur.
 - [ ] Utiliser un service de passerelle d'API afin d'obtenir la mise en cache, une limitation de la saturation des ressources, la gestion des pics d'activités et le déploiement automatique des ressources.
 
 ## Traitement
@@ -46,6 +52,7 @@ Checklist des points de sécurité les plus importants lors de la conception, du
 - [ ] Utiliser les réseaux de diffusion de contenu (CDN) pour l'envoie de fichier.
 - [ ] Dans le cas du traitement d'importantes quantités de données, utiliser des Workers et des Queues pour retourner les réponses rapidement et éviter un blocage HTTP.
 - [ ] Ne pas oublier de désactiver le mode DEBUG.
+- [ ] Utiliser des piles non exécutables lorsqu'elles sont disponibles.
 
 ## Sorties
 - [ ] Envoyer l'en-tête `X-Content-Type-Options: nosniff`.
@@ -60,7 +67,16 @@ Checklist des points de sécurité les plus importants lors de la conception, du
 - [ ] Vérifiez votre conception et votre implémentation avec une couverture des tests unitaires et d'intégration.
 - [ ] Utilisez un processus de revue de code et ignorez l'auto-approbation.
 - [ ] Assurez-vous que tous les composants de vos services sont scannés par un logiciel anti-virus avant la mise en production, ainsi que les bibliothèques tierces et autres dépendances.
+- [ ] Exécutez en continu des tests de sécurité (analyse statique/dynamique) sur votre code.
+- [ ] Vérifiez vos dépendances (logiciel et système d'exploitation) pour les vulnérabilités connues.
 - [ ] Concevez une solution de rollback pour les déploiements.
+
+## Surveillance
+- [ ] Utilisez des connexions centralisées pour tous les services et composants.
+- [ ] Utilisez des agents pour surveiller tout le trafic, les erreurs, les requêtes, et les réponses.
+- [ ] Utilisez des alertes pour SMS, Slack, Email, Telegram, Kibana, Cloudwatch, etc.
+- [ ] Assurez-vous que vous n'enregistrez aucune donnée sensible comme les cartes de crédit, les mots de passe, les codes PIN, etc.
+- [ ] Utilisez un système IDS et/ou IPS pour surveiller vos requêtes et instances d'API.
 
 
 ---

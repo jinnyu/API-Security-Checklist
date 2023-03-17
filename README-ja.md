@@ -1,4 +1,4 @@
-[English](./README.md) | [繁中版](./README-tw.md) | [简中版](./README-zh.md) | [Português (Brasil)](./README-pt_BR.md) | [Français](./README-fr.md) | [한국어](./README-ko.md) | [Nederlands](./README-nl.md) | [Indonesia](./README-id.md) | [ไทย](./README-th.md) | [Русский](./README-ru.md) | [Українська](./README-uk.md) | [Español](./README-es.md) | [Italiano](./README-it.md) | [Deutsch](./README-de.md) | [Türkçe](./README-tr.md) | [Tiếng Việt](./README-vi.md) | [Монгол](./README-mn.md) | [हिंदी](./README-hi.md) | [العربية](./README-ar.md) | [Polski](./README-pl.md) | [Македонски](./README-mk.md) | [ລາວ](./README-lo.md) | [فارسی](./README-fa.md) | [മലയാളം](./README-ml.md)
+[English](./README.md) | [繁中版](./README-tw.md) | [简中版](./README-zh.md) | [العربية](./README-ar.md) | [বাংলা](./README-bn.md) | [Čeština](./README-cs.md) | [Deutsch](./README-de.md) | [Ελληνικά](./README-el.md) | [Español](./README-es.md) | [فارسی](./README-fa.md) | [Français](./README-fr.md) | [हिंदी](./README-hi.md) | [Indonesia](./README-id.md) | [Italiano](./README-it.md) | [한국어](./README-ko.md) | [ລາວ](./README-lo.md) | [Македонски](./README-mk.md) | [മലയാളം](./README-ml.md) | [Монгол](./README-mn.md) | [Nederlands](./README-nl.md) | [Polski](./README-pl.md) | [Português (Brasil)](./README-pt_BR.md) | [Русский](./README-ru.md) | [ไทย](./README-th.md) | [Türkçe](./README-tr.md) | [Українська](./README-uk.md) | [Tiếng Việt](./README-vi.md)
 
 # APIセキュリティチェックリスト
 APIを設計、テスト、リリースするときの最も重要なセキュリティ対策のチェックリスト
@@ -17,6 +17,16 @@ APIを設計、テスト、リリースするときの最も重要なセキュ�
 - [ ] ペイロードからアルゴリズムを抽出しないこと。アルゴリズムは必ずバックエンド処理のみとする（`HS256`または`RS256`）。
 - [ ] トークンの有効期限（`TTL`, `RTTL`）を可能な限り短くする。
 - [ ] JWTのペイロードに機密情報を格納してはいけない。それは[簡単に](https://jwt.io/#debugger-io)復号できる。
+- [ ] あまり多くのデータを保存するに避けるください。JWTは通常header「ヘッダー」に共有され、サイズ制限があります。
+
+## アクセス
+- [ ] DDoSやブルートフォース攻撃を回避するため、リクエストを制限（スロットリング）する。
+- [ ] MITM（Man in the Middle Attack）を防ぐため、サーバサイドではHTTPSを使用する。
+- [ ] SSL Strip attackを防ぐため、SSL化とともに`HSTS`ヘッダを設定する。
+- [ ] ディレクトリ・リストをオフにしてください。
+- [ ] プライベートAPIの場合、ホワイト・リストに登録されたIP/ホストからのアクセスのみを許可します。
+
+## 認可
 
 ### OAuth
 - [ ] サーバサイドで常に`redirect_uri`を検証し、ホワイトリストに含まれるURLのみを許可する。
@@ -24,17 +34,13 @@ APIを設計、テスト、リリースするときの最も重要なセキュ�
 - [ ] `state`パラメータをランダムなハッシュと共に利用し、OAuth認証プロセスでのCSRFを防ぐ。
 - [ ] デフォルトのscopeを定義し、アプリケーション毎にscopeパラメータを検証する。
 
-## アクセス
-- [ ] DDoSやブルートフォース攻撃を回避するため、リクエストを制限（スロットリング）する。
-- [ ] MITM（Man in the Middle Attack）を防ぐため、サーバサイドではHTTPSを使用する。
-- [ ] SSL Strip attackを防ぐため、SSL化とともに`HSTS`ヘッダを設定する。
-
 ## 入力
 - [ ] 操作に応じて適切なHTTPメソッドを利用する。`GET（読み込み）`, `POST（作成）`, `PUT/PATCH（置き換え/更新）`, `DELETE（単一レコードの削除）`。リクエストメソッドがリソースに対して適切ではない場合、`405 Method Not Allowed`を返す。
 - [ ] リクエストのAcceptヘッダ（コンテンツネゴシエーション）の`content-type`を検証する。サポートしているフォーマット（例: `application/xml`, `application/json`等）は許可し、そうでない場合は`406 Not Acceptable`を返す。
 - [ ] POSTされたデータの`content-type`が受け入れ可能（例: `application/x-www-form-urlencoded`, `multipart/form-data`, `application/json`等）かどうかを検証する。
 - [ ] ユーザーの入力に一般的な脆弱性が含まれていないことを検証する（例: `XSS`, `SQLインジェクション`, `リモートコード実行`等）。
 - [ ] URLの中に機密情報（`認証情報`, `パスワード`, `セキュリティトークン`）を利用せず、標準的な認証ヘッダを使用する。
+- [ ] サーバー側の暗号化のみを使用してください。
 - [ ] キャッシュ、Rate Limit policies（例: `Quota`, `Spike Arrest`, `Concurrent Rate Limit`）を有効化し、APIリソースのデプロイを動的に行うため、APIゲートウェイサービスを利用する。
 
 ## 処理
@@ -46,6 +52,7 @@ APIを設計、テスト、リリースするときの最も重要なセキュ�
 - [ ] ファイルアップロードにはCDNを利用する。
 - [ ] 大量のデータを扱う場合、バックグラウンドでWorkerプロセスやキューを出来る限り使用し、レスポンスを速く返すことでHTTPブロッキングを避ける。
 - [ ] デバッグ・モードを無効にすることを忘れないでください。
+- [ ] 可能な場合は、実行不可能なスタックを使用してください。
 
 ## 出力
 - [ ] `X-Content-Type-Options: nosniff`をヘッダに付与する。
@@ -60,7 +67,16 @@ APIを設計、テスト、リリースするときの最も重要なセキュ�
 - [ ] ユニットテスト/結合テストのカバレッジで、設計と実装を継続的に検査する。
 - [ ] コードレビューのプロセスを採用し、自身による承認を無視する。
 - [ ] プロダクションへプッシュする前に、ベンダのライブラリ、その他の依存関係を含め、サービスの全ての要素をアンチウイルスソフトで静的スキャンする。
+- [ ] コードに対してセキュリティ・テスト（静的/動的分析）を継続的に実行して。
+- [ ] 既知の脆弱性について、依存関係（ソフトウェアとOSの両方）を確認して。
 - [ ] デプロイのロールバックを用意する。
+
+## モニタリング
+- [ ] すべてのサービスとコンポーネントに集中ログインを使用します。
+- [ ] すべてのトラフィック、エラー、リクエスト、およびレスポンスを監視ために、エージェントを使用します。
+- [ ] SMS、Slack、Email、Telegram、Kibana、Cloudwatch、などのアラートを使用します。
+- [ ] クレジット・カード、パスワード、ＰＩＮ、などの機密データをログに記録していないことを確認します。
+- [ ] ＡＰＩリクエストとインスタンスを監視ためにＩＤＳやＩＰＳシステムを使用します。
 
 
 ---

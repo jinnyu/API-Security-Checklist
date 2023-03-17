@@ -1,4 +1,4 @@
-[English](./README.md) | [繁中版](./README-tw.md) | [简中版](./README-zh.md) | [Português (Brasil)](./README-pt_BR.md) | [Français](./README-fr.md) | [한국어](./README-ko.md) | [Nederlands](./README-nl.md) | [Indonesia](./README-id.md) | [ไทย](./README-th.md) | [Русский](./README-ru.md) | [Українська](./README-uk.md) | [Español](./README-es.md) | [Italiano](./README-it.md) | [日本語](./README-ja.md) | [Deutsch](./README-de.md) | [Türkçe](./README-tr.md) | [Tiếng Việt](./README-vi.md) | [हिंदी](./README-hi.md) | [العربية](./README-ar.md) | [Polski](./README-pl.md) | [Македонски](./README-mk.md) | [ລາວ](./README-lo.md) | [فارسی](./README-fa.md) | [മലയാളം](./README-ml.md)
+[English](./README.md) | [繁中版](./README-tw.md) | [简中版](./README-zh.md) | [العربية](./README-ar.md) | [বাংলা](./README-bn.md) | [Čeština](./README-cs.md) | [Deutsch](./README-de.md) | [Ελληνικά](./README-el.md) | [Español](./README-es.md) | [فارسی](./README-fa.md) | [Français](./README-fr.md) | [हिंदी](./README-hi.md) | [Indonesia](./README-id.md) | [Italiano](./README-it.md) | [日本語](./README-ja.md) | [한국어](./README-ko.md) | [ລາວ](./README-lo.md) | [Македонски](./README-mk.md) | [മലയാളം](./README-ml.md) | [Nederlands](./README-nl.md) | [Polski](./README-pl.md) | [Português (Brasil)](./README-pt_BR.md) | [Русский](./README-ru.md) | [ไทย](./README-th.md) | [Türkçe](./README-tr.md) | [Українська](./README-uk.md) | [Tiếng Việt](./README-vi.md)
 
 # API Аюулгүйн жагсаалт
 API гаргах, загварчлах, тестлэхэд аюулгүйн талаас авах сөрөг арга хэмжээний жагсаалт.
@@ -14,9 +14,19 @@ API гаргах, загварчлах, тестлэхэд аюулгүйн та
 
 ### JWT (JSON Web Token)
 - [ ] Санамсаргүй үүссэн түлхүүр (`JWT Secret`) ашиглаж token -ыг brute force -оос хамгаал.
-- [ ] Payload -аас алгоритмаа бүү задал. Backend дээрээ хий (`HS256` or `RS256`).
+- [ ] Payload -аас алгоритмаа бүү задал. Backend дээрээ хий (`HS256` эсвэл `RS256`).
 - [ ] Токен дуусах хугацаа (`TTL`, `RTTL`) аль болох бага болго.
 - [ ] Чухал өгөгдлийг JWT payload -д бүү хадгал, decode хийхэд [амархан](https://jwt.io/#debugger-io).
+- [ ] Хэт их мэдээлэл хадгалахаас зайлсхий. JWT нь ихэвчлэн headers хэсэгт хуваагддаг бөгөөд тэдгээр нь хэмжээ хязгаартай байдаг.
+
+## Access
+- [ ] Хүсэлтийн тоог хязгаарлаж (Throttling) DDoS / brute-force дайралтаас хамгаална.
+- [ ] HTTPS ашиглаж сервер талдаа MITM (Man In The Middle Attack) дайралтаас хамгаална.
+- [ ] `HSTS` header -ыг SSL дээр ашиглаж SSL Strip дайралтаас хамгаална.
+- [ ] Лавлах жагсаалтыг унтраа.
+- [ ] Хувийн API-уудын хувьд зөвхөн зөвшөөрөгдсөн жагсаалтад орсон IP/хостоос хандахыг зөвшөөрнө үү.
+
+## Authorization
 
 ### OAuth
 - [ ] `redirect_uri` -ыг үргэлж сервер талд шалган зөвшөөрөгдсөн URL эсэхийг шалга.
@@ -24,17 +34,13 @@ API гаргах, загварчлах, тестлэхэд аюулгүйн та
 - [ ] OAuth authentication -ын үед `state` параметрийг санамсаргүй үүссэн hash ашиглан CSRF ээс сэргийлнэ.
 - [ ] Хувьсагчид анхны утга заавал оноож өг, утгыг байнга шалга.
 
-## Access
-- [ ] Хүсэлтийн тоог хязгаарлаж (Throttling) DDoS / brute-force дайралтаас хамгаална.
-- [ ] HTTPS ашиглаж сервер талдаа MITM (Man In The Middle Attack) дайралтаас хамгаална.
-- [ ] `HSTS` header -ыг SSL дээр ашиглаж SSL Strip дайралтаас хамгаална.
-
 ## Input
 - [ ] Яг зөв HTTP хүсэлтийг ашигла: `GET (унших)`, `POST (үүсгэх)`, `PUT/PATCH (орлуулах/солих)`, мөн `DELETE (устгах)`, бас `405 Method Not Allowed` -ыг хүсэлтийн төрөл тодорхойгүй үед ашигла.
 - [ ] `content-type` -ыг хүсэлтийн header (Content Negotiation) дээр шалгаж зөвхөн дэмжигдсэн төрлийг зөвшөөр (Жнь. `application/xml`, `application/json`, гэх мэт) бас төрөл нь таарахгүй бол `406 Not Acceptable` хариу буцаа.
 - [ ] `content-type` -ыг post хийх өгөгдөл дээр шалга (Жнь. `application/x-www-form-urlencoded`, `multipart/form-data`, `application/json`, г.м).
 - [ ] Хэрэглэгчээс гараас оруулсан утгыг шалгаж түгээмэл нүхнүүдээс сэргийлнэ. (Жнь. `XSS`, `SQL-Injection`, `Remote Code Execution`, г.м).
-- [ ] Чухал өгөгдлүүдийг (`credentials`, `Passwords`, `security tokens`, or `API keys`) URL ээр бүү явуул, оронд нь стандарт Authorization header ашигла.
+- [ ] Чухал өгөгдлүүдийг (`credentials`, `Passwords`, `security tokens`, эсвэл `API keys`) URL ээр бүү явуул, оронд нь стандарт Authorization header ашигла.
+- [ ] Зөвхөн сервер талын шифрлэлтийг ашиглана уу.
 - [ ] API Gateway үйлчилгээ ашиглан Rate Limit Policies (Жнь. `Quota`, `Spike Arrest`, `Concurrent Rate Limit`) болон cache хийх, мөн API deploy хийхэд ашигла.
 
 ## Processing
@@ -46,6 +52,7 @@ API гаргах, загварчлах, тестлэхэд аюулгүйн та
 - [ ] Файл upload хийхэд CDN ашигла.
 - [ ] Их хэмжээний өгөгдөлтэй ажиллах үед Workers болон Queue ашиглан үйлдлийг аль болох background -д ажиллуулж хариуг хурдан явуулах нь HTTP Blocking -оос сэргийлнэ.
 - [ ] DEBUG горимыг унтраах.
+- [ ] Боломжтой үед гүйцэтгэх боломжгүй stack ашигла.
 
 ## Output
 - [ ] `X-Content-Type-Options: nosniff` header дээр явуул.
@@ -60,7 +67,16 @@ API гаргах, загварчлах, тестлэхэд аюулгүйн та
 - [ ] unit/integration тест ашиглан системийн загварчлал, хэрэгжилтийг шалгах.
 - [ ] Код шалгалт ашигла, мөн өөрөө өөрийгөө ч шалга.
 - [ ] Бүх тусдаа хэсгүүд бүр vendor сан, бусад нэмэлт сангууд бүгдийг нь AV програмаар статикаар шалга.
+- [ ] Код дээрээ аюулгүй байдлын тестийг (статик/динамик анализ) тасралтгүй ажиллуул.
+- [ ] Мэдэгдэж буй сул талуудыг өөрийн хамаарлыг (програм хангамж болон үйлдлийн систем) шалгана уу.
 - [ ] Ямар ч үед deploy хийхэд амар шийдэл гаргах.
+
+## Monitoring
+- [ ] Use centralized logins for all services and components.
+- [ ] Use agents to monitor all traffic, errors, requests, and responses.
+- [ ] Use alerts for SMS, Slack, Email, Telegram, Kibana, Cloudwatch, etc.
+- [ ] Ensure that you aren't logging any sensitive data like credit cards, passwords, PINs, etc.
+- [ ] Use an IDS and/or IPS system to monitor your API requests and instances.
 
 
 ---

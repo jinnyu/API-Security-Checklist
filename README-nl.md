@@ -1,4 +1,4 @@
-[English](./README.md) | [繁中版](./README-tw.md) | [简中版](./README-zh.md) | [Português (Brasil)](./README-pt_BR.md) | [Français](./README-fr.md) | [한국어](./README-ko.md) | [Indonesia](./README-id.md) | [ไทย](./README-th.md) | [Русский](./README-ru.md) | [Українська](./README-uk.md) | [Español](./README-es.md) | [Italiano](./README-it.md) | [日本語](./README-ja.md) | [Deutsch](./README-de.md) | [Türkçe](./README-tr.md) | [Tiếng Việt](./README-vi.md) | [Монгол](./README-mn.md) | [हिंदी](./README-hi.md) | [العربية](./README-ar.md) | [Polski](./README-pl.md) | [Македонски](./README-mk.md) | [ລາວ](./README-lo.md) | [فارسی](./README-fa.md) | [മലയാളം](./README-ml.md)
+[English](./README.md) | [繁中版](./README-tw.md) | [简中版](./README-zh.md) | [العربية](./README-ar.md) | [বাংলা](./README-bn.md) | [Čeština](./README-cs.md) | [Deutsch](./README-de.md) | [Ελληνικά](./README-el.md) | [Español](./README-es.md) | [فارسی](./README-fa.md) | [Français](./README-fr.md) | [हिंदी](./README-hi.md) | [Indonesia](./README-id.md) | [Italiano](./README-it.md) | [日本語](./README-ja.md) | [한국어](./README-ko.md) | [ລາວ](./README-lo.md) | [Македонски](./README-mk.md) | [മലയാളം](./README-ml.md) | [Монгол](./README-mn.md) | [Polski](./README-pl.md) | [Português (Brasil)](./README-pt_BR.md) | [Русский](./README-ru.md) | [ไทย](./README-th.md) | [Türkçe](./README-tr.md) | [Українська](./README-uk.md) | [Tiếng Việt](./README-vi.md)
 
 # API Security Checklist
 Checklist met de belangrijkste tegenmaatregelen bij het ontwerpen, testen en uitbrengen van een API.
@@ -17,6 +17,16 @@ Checklist met de belangrijkste tegenmaatregelen bij het ontwerpen, testen en uit
 - [ ] Haal het algoritme niet uit de payload. Dwing het algoritme af in de backend (`HS256` of `RS256`).
 - [ ] Zet de token vervaltijd (`TTL`, `RTTL`) zo kort mogelijk.
 - [ ] Sla geen gevoelige data op in de JWT payload, deze is [makkelijk](https://jwt.io/#debugger-io) te decoderen.
+- [ ] Vermijd het opslaan van te veel gegevens. JWT wordt meestal gedeeld in headers en ze hebben een maximale grootte.
+
+## Toegang
+- [ ] Limiteer het aantal requests om DDoS en/of Bruteforce aanvallen te ontkrachten.
+- [ ] Gebruik HTTPS aan de server zijde om MITM (Man In The Middle Attacks) tegen te gaan.
+- [ ] Gebruik de `HSTS` header i.c.m SSL om een SSL Strip attack te ontkrachten.
+- [ ] Schakel directoryvermeldingen uit.
+- [ ] Sta voor privé-API's alleen toegang toe vanaf op de witte lijst geplaatste IP's/hosts.
+
+## Authorization
 
 ### OAuth
 - [ ] Valideer **ALTIJD** de `redirect_uri` op de server om alleen toegestane URL te accepteren.
@@ -24,17 +34,13 @@ Checklist met de belangrijkste tegenmaatregelen bij het ontwerpen, testen en uit
 - [ ] Gebruik de `state` parameter met een random hash om CSRF op een OAuth authentication process te voorkomen.
 - [ ] Definieer een standaard scope, en valideer deze scope parameter voor elke applicatie.
 
-## Toegang
-- [ ] Limiteer het aantal requests om DDoS en/of Bruteforce aanvallen te ontkrachten.
-- [ ] Gebruik HTTPS aan de server zijde om MITM (Man In The Middle Attacks) tegen te gaan.
-- [ ] Gebruik de `HSTS` header i.c.m SSL om een SSL Strip attack te ontkrachten.
-
 ## Invoer
 - [ ] Gebruik de correcte HTTP methode voor de operatie, `GET (lezen)`, `POST (schrijven)`, `PUT (vervangen/updaten)` and `DELETE (verwijderen)`.
 - [ ] Valideer de `content-type` header bij een request Accept header (Content Negotiation) om alleen de ondersteunde formaten toe te staan (b.v. `application/xml`, `application/json` ... enz) en stuur een `406 Not Acceptable` response als de `content-type` niet ondersteund is.
 - [ ] Valideer de `content-type` header van gestuurde data (b.v. `application/x-www-form-urlencoded`, `multipart/form-data`, `application/json` ... enz).
 - [ ] Valideer de gebruiker invoer om veel voorkomende kwetsbaarheden te voorkomen (v.b. `XSS`, `SQL-Injection`, `Remote Code Execution` ... enz).
 - [ ] Gebruik geen gevoelige data (`credentials`, `Wachtwoorden`, `security tokens`, of `API keys`) in de URL, maar gebruik de standaard Authorization header.
+- [ ] Gebruik alleen versleuteling aan de serverzijde.
 - [ ] Gebruik een API Gateway service voor caching, policies (b.v. `Quota`, `Spike Arrest`, `Concurrent Rate Limit`) en voor het dynamisch deployen van API middelen.
 
 ## Processing
@@ -46,6 +52,7 @@ Checklist met de belangrijkste tegenmaatregelen bij het ontwerpen, testen en uit
 - [ ] Gebruik CDN voor het uploaden van bestanden.
 - [ ] Als er met grote/mega hoeveelheden data gewerkt wordt, gebruik dan Workers en Queues om snel een response te geven en HTTP Blocking te voorkomen.
 - [ ] Vergeet niet om de DEBUG mode uit te zetten.
+- [ ] Gebruik niet-uitvoerbare stacks indien beschikbaar.
 
 ## Output
 - [ ] Stel de `X-Content-Type-Options: nosniff` header in.
@@ -60,7 +67,16 @@ Checklist met de belangrijkste tegenmaatregelen bij het ontwerpen, testen en uit
 - [ ] Controleer het ontwerp en de implementatie met unit/integration test dekking.
 - [ ] Gebruik een code review traject en controleer niet zelf je eigen code.
 - [ ] Scan de API voor het naar productie zetten door AV software, niet alleen eigen code maar ook de libraries en andere gebruikte dependencies.
+- [ ] Voer continu beveiligingstests (statische/dynamische analyse) uit op uw code.
+- [ ] Controleer uw afhankelijkheden (zowel software en besturingssysteem) op bekende kwetsbaarheden.
 - [ ] Ontwikkel een terugrol oplossing.
+
+## Monitoring
+- [ ] Gebruik gecentraliseerde aanmeldingen voor alle services en componenten.
+- [ ] Gebruik agents om al het verkeer, fouten, verzoeken en reacties te monitoren.
+- [ ] Gebruik waarschuwingen voor SMS, Slack, E-mail, Telegram, Kibana, Cloudwatch, etc.
+- [ ] Zorg ervoor dat u geen gevoelige gegevens registreert, zoals creditcards, wachtwoorden, pincodes, enz.
+- [ ] Gebruik een IDS- en/of IPS-systeem om uw API-verzoeken en instanties te monitoren.
 
 
 ---
